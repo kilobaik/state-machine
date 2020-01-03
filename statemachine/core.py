@@ -59,13 +59,8 @@ class State:
 
 
 class StateMachine:
-    def __init__(self, *args, **kwargs):
-        super(StateMachine, self).__init__(*args, **kwargs)
+    def __init__(self):
         self.states_metadata, self.current_state = [], None
-        self.__manipulate_state_handlers()
-        self.__initial_state = self.current_state
-
-    def __manipulate_state_handlers(self):
         states_handlers = inspect.getmembers(self, predicate=Utils.is_state_handler)
 
         for handler_name, handler_action in states_handlers:
@@ -83,6 +78,8 @@ class StateMachine:
 
             if self.current_state is None:
                 raise NoInitialStateFound()
+
+        self.__initial_state = self.current_state
 
     def current(self) -> Tuple[Any]:
         state_metadata = Utils.find_current_state_metadata(self)
